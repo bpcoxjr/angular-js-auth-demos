@@ -2,7 +2,7 @@
 angular.module('authDemo1', ['ngRoute'])
 	.config(function($httpProvider, $routeProvider, $locationProvider) {
 		
-		// add interceptor
+		// add interceptor 
 		$httpProvider.interceptors.push('authenticationInterceptor');
 
 		$locationProvider.html5Mode(true);
@@ -45,10 +45,7 @@ angular.module('authDemo1', ['ngRoute'])
 		return {
 			request: function(request) {
 				if(request.url.match(/api/) && !userSession.loggedIn) {
-					var previousPage = $location.path();
-					$location.path('/login').search({
-						previous: previousPage
-					});
+					$location.path('/login');
 				}
 				return request;
 			}
