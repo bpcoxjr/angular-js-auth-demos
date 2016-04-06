@@ -42,15 +42,18 @@ angular.module('authDemo1', ['ngRoute'])
 	})
 	//if '/api/' is found in the URL & user is not logged in, route to /login 
 	.factory('authenticationInterceptor', function(userSession, $location) {
-		return {
-			request: function(request) {
-				if(request.url.match(/api/) && !userSession.loggedIn) {
-					$location.path('/login');
-				}
-				return request;
-			}
-		}
-	})
+    return {
+        request : function(request) {
+            if(request.url.match(/api/) && !userSession.loggedIn) {
+                var previousPage = $location.path();
+                $location.path('/login').search({
+                    previous : previousPage
+                });
+            }
+            return request;
+        }
+    }
+});
 	//use $http service to make call to Github & pull down list of repositories;
 	//because '/api/' is in the url, 'authenticationInterceptor' will be triggered, which
 	//will redirect user to login page if not already logged in
