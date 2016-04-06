@@ -1,3 +1,4 @@
+//declare angular module 'authDemo1' that relies on ngRoute as dependency
 angular.module('authDemo1', ['ngRoute'])
 	.config(function($httpProvider, $routeProvider, $locationProvider) {
 		
@@ -11,6 +12,11 @@ angular.module('authDemo1', ['ngRoute'])
 		.when('/', {
 			controller : 'HomePageController',
 			templateUrl: 'home.html',
+			//resolve block used to provide dependencies that must be 'resolved'
+			//before the controller is loaded. Here we say that ghRepos() must run
+			//and return a scope variable called 'repos' that will be available to 
+			//'HomePageController' & it will contain whatever we have the ghRepos
+			//service return 
 			resolve: {
 				repos: function(ghRepos) {
 					return ghRepos();
@@ -34,6 +40,7 @@ angular.module('authDemo1', ['ngRoute'])
 			loggedIn: false
 		}
 	})
+	//if '/api/' is found in the URL & user is not logged in, route to /login 
 	.factory('authenticationInterceptor', function(userSession, $location) {
 		return {
 			request: function(request) {
@@ -47,17 +54,22 @@ angular.module('authDemo1', ['ngRoute'])
 			}
 		}
 	})
+	//use $http service to make call to Github & pull down list of repositories;
+	//because '/api/' is in the url, 'authenticationInterceptor' will be triggered, which
+	//will redirect user to login page if not already logged in
 	.factory('ghRepos', function($http) {
 		return function() {
 			return $http.get('https://api.github.com/repositories');
 		};
 	})
+	//watch to see if user logged in or not
 	.controller('MainController', function($scope, userSession) {
 		$scope.loggedIn = userSession.loggedIn; 
 		$scope.$watch(function(){return userSession.loggedIn}, function(newVal, oldVal){
 			$scope.loggedIn = newVal;
 		})
 	})
+	//check to see if username and password match up to determine loggedIn status
 	.controller('LoginController', function(userSession, $location) {
 		var ctrl = this;
 		ctrl.previousPage = $location.search().previous;

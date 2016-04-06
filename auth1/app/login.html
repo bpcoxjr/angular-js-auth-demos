@@ -1,13 +1,19 @@
 <p>This is the login page.</p>
 <form name='loginForm' ng-controller='LoginController as ctrl' ng-submit='loginForm.$valid && ctrl.login(username, password)'>
+	<!-- show this <p> if no username entered -->
 	<p ng-if='loginForm.username.$error.required'>You did not enter a username</p>
+	<!-- show this <p> if no password entered -->
+	<p ng-if='loginForm.password.$error.required'>You did not enter a password</p>
+	<!-- show this <p> if entry invalid -->
 	<p ng-if='ctrl.loginFailed'>Your username + password combination is invalid</p>
 	<div class='field'>
 		<label>Username: </label>
+		<!-- capture input in 'username' variable -->
 		<input type='text' ng-model='username' name='username' />
 	</div>
 	<div class='field'>
 		<label>Password: </label>
+		<!-- capture input in 'password' variable -->
 		<input type='password' ng-model='password' name='password' />
 	</div>
 	<input type="submit" value="Submit">

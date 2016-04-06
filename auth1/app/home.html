@@ -1,5 +1,6 @@
 <h1>100 Github Repos</h1>
 <ol>
+	<!-- iterate through popularRepos array -->
 	<li ng-repeat="repo in popularRepos">
 		<p>
 			<a href="{{ repo.html_url }}" target="_blank"> {{ repo.name }}</a>: {{ repo.description }}
